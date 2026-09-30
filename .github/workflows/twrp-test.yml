@@ -122,8 +122,8 @@ jobs:
       - name: Repo sync source tree
         run: |
           cd "$GITHUB_WORKSPACE"
-          repo init --depth=1 -u "$MANIFEST_URL" -b "$MANIFEST_BRANCH" --no-repo-verify
-          repo sync -c --force-sync --no-tags --no-clone-bundle --optimized-fetch -j"$(nproc --all)"
+          "$HOME/bin/repo" init --depth=1 -u "$MANIFEST_URL" -b "$MANIFEST_BRANCH" --no-repo-verify
+          "$HOME/bin/repo" sync -c --force-sync --no-tags --no-clone-bundle --optimized-fetch -j"$(nproc --all)"
 
       - name: Pin custom bootable recovery
         shell: bash
