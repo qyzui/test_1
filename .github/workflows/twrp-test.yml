@@ -128,7 +128,6 @@ jobs:
       - name: Pin custom bootable recovery
         shell: bash
         run: |
-          set -euo pipefail
           cd "$GITHUB_WORKSPACE"
           rm -rf bootable/recovery
           mkdir -p bootable
