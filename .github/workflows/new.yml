@@ -150,9 +150,9 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           mkdir -p "$(dirname "$DEVICE_TREE_PATH")"
           # 临时带Token远程，克隆完成清除密钥，兼容任意输入device_tree_url
+          AUTH_URL="https://x-access-token:${GH_TOKEN}@github.com/qyzui/7.git"
           git clone --depth=1 --single-branch --branch "$DEVICE_TREE_BRANCH" \
-            -c http.extraheader="AUTHORIZATION: bearer ${GH_TOKEN}" \
-            "$DEVICE_TREE_URL" "$DEVICE_TREE_PATH"
+            "$AUTH_URL" "$DEVICE_TREE_PATH"
           # 清除本地仓库保存的鉴权信息，杜绝密钥泄露
           git -C "$DEVICE_TREE_PATH" remote set-url origin "$DEVICE_TREE_URL"
 
@@ -183,6 +183,11 @@ jobs:
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
+
+          rm -rf .repo
+          find . -type d -name .git -prune -exec rm -rf {} +
+          df -h
+
           export USE_CCACHE=1
           export CCACHE_EXEC=/usr/bin/ccache
           export CCACHE_DIR="$CCACHE_DIR"
