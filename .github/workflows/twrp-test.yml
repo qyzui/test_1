@@ -183,6 +183,10 @@ jobs:
         run: |
           cd "$GITHUB_WORKSPACE"
 
+          rm -rf .repo
+          find . -type d -name .git -prune -exec rm -rf {} +
+          df -h
+
           export USE_CCACHE=1
           export CCACHE_EXEC=/usr/bin/ccache
           export CCACHE_DIR="$CCACHE_DIR"
