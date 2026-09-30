@@ -1,0 +1,48 @@
+name: Private 7 Clone Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      device_tree_branch:
+        description: 'Branch in private qyzui/7'
+        required: true
+        default: 'twrp-16.0'
+
+jobs:
+  test-clone:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check secret
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.PRIVATE_7_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TOKEN:-}" ]; then
+            echo "PRIVATE_7_TOKEN is not available."
+            exit 1
+          fi
+          echo "PRIVATE_7_TOKEN is available."
+
+      - name: Test private repository access
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.PRIVATE_7_TOKEN }}
+          BRANCH: ${{ inputs.device_tree_branch }}
+        run: |
+          set -euo pipefail
+
+          URL="https://x-access-token:${TOKEN}@github.com/qyzui/7.git"
+
+          echo "Testing qyzui/7 branch: ${BRANCH}"
+          git ls-remote --heads "${URL}" "refs/heads/${BRANCH}"
+
+          rm -rf device-tree
+          git clone --depth=1 --single-branch --branch "${BRANCH}" "${URL}" device-tree
+
+          cd device-tree
+          echo "Clone succeeded."
+          echo "Branch: $(git branch --show-current)"
+          echo "Commit: $(git rev-parse HEAD)"
+          echo "Repository access test passed."
