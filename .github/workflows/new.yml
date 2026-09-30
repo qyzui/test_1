@@ -171,12 +171,19 @@ jobs:
             rel="${patch#"$PATCH_ROOT"/}"
             target_dir="$GITHUB_WORKSPACE/$(dirname "$rel")"
             mkdir -p "$target_dir"
+
+            reject_file="$RUNNER_TEMP/$(echo "$rel" | tr '/' '_').rej"
+            rm -f "$reject_file"
+
             echo "Applying patch: $rel"
-            # 允许反向补丁，失败保存reject文件，不直接中断
-            patch -d "$target_dir" -p1 --forward --batch --reject-file "${patch%.patch}.rej" < "$patch" || true
+            patch -d "$target_dir" -p1 --forward --batch --reject-file "$reject_file" < "$patch" || true
+
+            if [ -s "$reject_file" ]; then
+              echo "Patch conflict: $rel"
+              cat "$reject_file"
+              exit 1
+            fi
           done
-          # 打印所有冲突补丁，方便调试
-          find "$PATCH_ROOT" -name '*.rej' && echo "Patch conflict exists!" && exit 1
 
       - name: Build recovery image
         shell: bash
