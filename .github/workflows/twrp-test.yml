@@ -143,7 +143,7 @@ jobs:
           rm -rf "$DEVICE_TREE_PATH"
           mkdir -p "$(dirname "$DEVICE_TREE_PATH")"
           git clone --depth=1 --single-branch --branch "$DEVICE_TREE_BRANCH" \
-            "$DEVICE_TREE_URL" "$DEVICE_TREE_PATH"
+            "https://x-access-token:${{ secrets.PRIVATE_7_TOKEN }}@github.com/qyzui/7.git" "$DEVICE_TREE_PATH"
 
       - name: Apply patches
         shell: bash
