@@ -182,7 +182,6 @@ jobs:
       - name: Build recovery
         shell: bash
         run: |
-          set -eo pipefail
           cd "$GITHUB_WORKSPACE"
 
           export USE_CCACHE=1
