@@ -120,10 +120,10 @@ jobs:
       - name: Install repo tool
         run: |
           mkdir -p "$HOME/bin"
-          curl -fsSL --retry 3 https://storage.googleapis.com/git-repo-downloads/repo -o "$HOME/bin/repo"
+          curl -fsSL https://storage.googleapis.com/git-repo-downloads/repo -o "$HOME/bin/repo"
           chmod a+rx "$HOME/bin/repo"
           echo "$HOME/bin" >> "$GITHUB_PATH"
-          repo --version
+          "$HOME/bin/repo" --version
 
       - name: Repo sync source tree
         run: |
