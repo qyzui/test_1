@@ -130,8 +130,8 @@ jobs:
           set -euo pipefail
           cd "$GITHUB_WORKSPACE"
           rm -rf .repo out bootable/recovery "$DEVICE_TREE_PATH"
-          repo init --depth=1 -u "$MANIFEST_URL" -b "$MANIFEST_BRANCH"
-          repo sync -c --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune -j"$(nproc --all)"
+          "$HOME/bin/repo" init --depth=1 -u "$MANIFEST_URL" -b "$MANIFEST_BRANCH"
+          "$HOME/bin/repo" sync -c --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune -j"$(nproc --all)"
 
       - name: Pin custom bootable recovery
         shell: bash
