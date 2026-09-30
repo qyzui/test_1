@@ -1,4 +1,4 @@
-name: TWRP Test Build
+name: TWRP Test Build2
 
 on:
   workflow_dispatch:
