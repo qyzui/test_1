@@ -188,9 +188,9 @@ jobs:
       - name: Build recovery image
         shell: bash
         run: |
-          set -euo pipefail
           cd "$GITHUB_WORKSPACE"
 
+          # 构建前释放 repo/git 元数据空间
           rm -rf .repo
           find . -type d -name .git -prune -exec rm -rf {} +
           df -h
