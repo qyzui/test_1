@@ -211,12 +211,23 @@ jobs:
         if: always()
         run: ccache --show-stats || true
 
+      - name: Prepare timestamped recovery artifacts
+        if: success()
+        shell: bash
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          TIMESTAMP="$(date '+%Y%m%d_%H%M%S')"
+          PRODUCT_DIR="out/target/product/${DEVICE_NAME}"
+          mkdir -p "$GITHUB_WORKSPACE/artifacts"
+          cp "$PRODUCT_DIR/recovery.img" "$GITHUB_WORKSPACE/artifacts/recovery_${TIMESTAMP}.img"
+          cp "$PRODUCT_DIR/vendor_boot.img" "$GITHUB_WORKSPACE/artifacts/vendor_boot_${TIMESTAMP}.img"
+          echo "Timestamp: $TIMESTAMP"
+          ls -lh "$GITHUB_WORKSPACE/artifacts"
+
       - name: Upload recovery artifacts
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: twrp-${{ inputs.device_name }}-recovery
-          path: |
-            out/target/product/${{ inputs.device_name }}/recovery.img
-            out/target/product/${{ inputs.device_name }}/vendor_boot.img
+          name: twrp-${{ inputs.device_name }}-recovery-${{ github.run_number }}
+          path: artifacts/*
           if-no-files-found: error
