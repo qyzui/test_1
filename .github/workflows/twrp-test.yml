@@ -26,7 +26,7 @@ on:
       device_tree_branch:
         description: 'Device tree branch'
         required: true
-        default: 'twrp-16.0'
+        default: 'test'
       device_name:
         description: 'Device codename / product name'
         required: true
